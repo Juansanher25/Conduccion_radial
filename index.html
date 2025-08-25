@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conducción Estacionaria en Cilindros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .tab-button.active {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        mjx-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+        .prose ul { list-style-type: disc; margin-left: 1.5rem; }
+        .prose a { color: #3b82f6; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <!-- Pestañas de Navegación -->
+        <div class="mb-6 border-b border-gray-200">
+            <nav class="flex flex-wrap -mb-px" aria-label="Tabs">
+                <button class="tab-button active text-lg font-medium text-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="tab-portada-cil">Portada</button>
+                <button class="tab-button text-lg font-medium text-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="tab-intro-cil">Introducción</button>
+                <button class="tab-button text-lg font-medium text-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="tab-sim-multi-cil">Sim: Multicapas</button>
+                <button class="tab-button text-lg font-medium text-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="tab-crit-radius-cil">Radio Crítico</button>
+                <button class="tab-button text-lg font-medium text-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="tab-apps-cil">Aplicaciones</button>
+                <button class="tab-button text-lg font-medium text-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="tab-exercise-cil">Ejercicio</button>
+                <button class="tab-button text-lg font-medium text-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="tab-calc-cil">Calculadora</button>
+                <button class="tab-button text-lg font-medium text-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="tab-quiz-cil">Cuestionario</button>
+                <button class="tab-button text-lg font-medium text-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="tab-biblio-cil">Bibliografía</button>
+            </nav>
+        </div>
+
+        <!-- Contenido de las Pestañas -->
+        <main>
+            <!-- Pestaña Portada -->
+            <div id="tab-portada-cil" class="tab-content active">
+                <div class="text-center bg-white p-12 rounded-xl shadow-md">
+                    <h2 class="text-3xl font-bold text-blue-800">Transferencia de Calor I</h2>
+                    <h1 class="text-5xl font-bold text-gray-900 mt-4">Conducción de Calor Estacionaria en Cilindros</h1>
+                    <p class="text-2xl text-gray-700 mt-8">Ph.D. Juan Sandoval Herrera</p>
+                    <p class="text-xl text-gray-600 mt-2">Universidad de América</p>
+                    <p class="text-lg text-gray-500 mt-10">2025</p>
+                </div>
+            </div>
+
+            <!-- Pestaña Introducción -->
+            <div id="tab-intro-cil" class="tab-content">
+                <div class="bg-white p-8 rounded-xl shadow-md prose max-w-none">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Introducción a la Conducción en Cilindros</h2>
+                    <p>La conducción de calor en geometrías cilíndricas es fundamental en ingeniería, especialmente en el análisis de tuberías, cables y otros componentes similares. A diferencia de las placas planas, en un cilindro el calor fluye radialmente hacia afuera o hacia adentro.</p>
+                    <p>La principal diferencia con las paredes planas es que el <strong>área de transferencia de calor no es constante</strong>, sino que aumenta con el radio. Para un cilindro de longitud \(L\), el área a un radio \(r\) es \(A = 2 \pi r L\).</p>
+                    <div class="flex justify-center my-6">
+                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Hollow_cylinder_with_convective_surface_conditions.jpg/640px-Hollow_cylinder_with_convective_surface_conditions.jpg" alt="Diagrama de conducción de calor en un cilindro hueco con convección" class="rounded-lg shadow-lg" style="max-width: 500px;">
+                    </div>
+                    <p>La Ley de Fourier en coordenadas cilíndricas para la dirección radial es:</p>
+                    <p>$$ \dot{Q}_{cond} = -k A_r \frac{dT}{dr} = -k (2 \pi r L) \frac{dT}{dr} $$</p>
+                    <p>Para un cilindro hueco con radio interior \(r_1\), radio exterior \(r_2\), y temperaturas superficiales \(T_1\) y \(T_2\), la integración de la ley de Fourier nos da la tasa de transferencia de calor:</p>
+                    <p>$$ \dot{Q}_{cond} = \frac{2 \pi L k (T_1 - T_2)}{\ln(r_2/r_1)} $$</p>
+                    <p>La resistencia térmica a la conducción para un cilindro hueco es:</p>
+                    <p>$$ R_{cil} = \frac{\ln(r_2/r_1)}{2 \pi L k} $$</p>
+                    <p>Note que la distribución de temperatura a través del cilindro no es lineal, sino logarítmica.</p>
+                </div>
+            </div>
+
+            <!-- Pestaña Sim: Multicapas -->
+            <div id="tab-sim-multi-cil" class="tab-content">
+                 <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h2 class="text-2xl font-semibold mb-4 text-gray-700">Simulación: Cilindros Multicapas</h2>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4 border-b pb-4">
+                            <div><label for="s2-Tinf1-cil" class="block text-sm font-medium text-gray-700">\(T_{\infty,1}\) (°C)</label><input type="number" id="s2-Tinf1-cil" value="150" class="mt-1 w-full p-2 border rounded-md"></div>
+                            <div><label for="s2-h1-cil" class="block text-sm font-medium text-gray-700">\(h_1\) (W/m²·K)</label><input type="number" id="s2-h1-cil" value="20" class="mt-1 w-full p-2 border rounded-md"></div>
+                            <div><label for="s2-Tinf2-cil" class="block text-sm font-medium text-gray-700">\(T_{\infty,2}\) (°C)</label><input type="number" id="s2-Tinf2-cil" value="20" class="mt-1 w-full p-2 border rounded-md"></div>
+                            <div><label for="s2-h2-cil" class="block text-sm font-medium text-gray-700">\(h_2\) (W/m²·K)</label><input type="number" id="s2-h2-cil" value="5" class="mt-1 w-full p-2 border rounded-md"></div>
+                            <div><label for="s2-L-cil" class="block text-sm font-medium text-gray-700">Longitud (m)</label><input type="number" id="s2-L-cil" value="10" class="mt-1 w-full p-2 border rounded-md"></div>
+                        </div>
+
+                        <div id="layers-container-cil" class="space-y-4"></div>
+
+                        <div class="mt-4 flex space-x-2">
+                            <button id="add-layer-btn-cil" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Añadir Aislamiento</button>
+                            <button id="remove-layer-btn-cil" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Quitar Aislamiento</button>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Visualización y Resultados</h3>
+                        <div id="s2-visualization-cil" class="w-full h-80 bg-gray-100 rounded-lg p-4 mb-4 flex items-center justify-center">
+                             <svg id="s2-svg-cil" width="100%" height="100%" viewBox="-10 -10 220 220"></svg>
+                        </div>
+                        <div id="s2-results-cil" class="space-y-2 text-lg"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pestaña Radio Crítico -->
+            <div id="tab-crit-radius-cil" class="tab-content">
+                 <div class="bg-white p-8 rounded-xl shadow-md max-w-4xl mx-auto">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Radio Crítico de Aislamiento</h2>
+                    <div class="prose max-w-none grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <p>Un fenómeno único en geometrías cilíndricas y esféricas es el <strong>radio crítico de aislamiento</strong>. Al añadir aislamiento a una superficie curva, se añade resistencia a la conducción, pero también se aumenta el área superficial para la convección, lo que disminuye la resistencia a la convección.</p>
+                            <p>Dependiendo de cuál de estos efectos domine, la transferencia de calor total puede aumentar o disminuir. El radio crítico \(r_{cr}\) es el radio de aislamiento para el cual la tasa de transferencia de calor es máxima (y la resistencia total es mínima).</p>
+                            <p>Para un cilindro, se calcula como:</p>
+                            <p>$$ r_{cr, cilindro} = \frac{k}{h} $$</p>
+                            <p>Donde \(k\) es la conductividad térmica del <strong>aislamiento</strong> y \(h\) es el coeficiente de transferencia de calor por <strong>convección exterior</strong>.</p>
+                            <ul>
+                                <li>Si el radio exterior del aislamiento \(r_2 < r_{cr}\), añadir más aislamiento <strong>aumentará</strong> la pérdida de calor.</li>
+                                <li>Si el radio exterior del aislamiento \(r_2 > r_{cr}\), añadir más aislamiento <strong>disminuirá</strong> la pérdida de calor.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">Calculadora de Radio Crítico</h4>
+                            <div class="space-y-2">
+                                <div><label>k del aislamiento (W/m·K)</label><input type="number" id="rc-k" value="0.04" class="w-full p-1 border rounded"></div>
+                                <div><label>h exterior (W/m²·K)</label><input type="number" id="rc-h" value="5" class="w-full p-1 border rounded"></div>
+                            </div>
+                            <button id="rc-calc-btn" class="mt-3 w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Calcular \(r_{cr}\)</button>
+                            <p id="rc-result" class="mt-3 font-bold text-lg"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pestaña Aplicaciones -->
+            <div id="tab-apps-cil" class="tab-content">
+                <div class="bg-white p-8 rounded-xl shadow-md prose max-w-none">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Aplicaciones en el Mundo Real</h2>
+                    <p>El análisis de la conducción en cilindros es vital para el diseño de sistemas de transporte de fluidos y energía.</p>
+                    <ul>
+                        <li><strong>Tuberías Aisladas:</strong> El ejemplo más común. Se utiliza para calcular la pérdida de calor en tuberías que transportan fluidos calientes (como vapor o agua caliente) o la ganancia de calor en las que transportan fluidos fríos (como refrigerantes o agua helada). El objetivo es minimizar el intercambio de calor con el entorno para mantener la eficiencia y la temperatura deseada del fluido.</li>
+                        <li><strong>Cables Eléctricos:</strong> La corriente que fluye a través de un cable genera calor debido a la resistencia eléctrica. Este calor debe ser disipado al entorno. El aislamiento eléctrico también actúa como aislamiento térmico. El análisis de conducción ayuda a determinar la temperatura máxima que alcanzará el cable, asegurando que no exceda los límites del material de aislamiento para evitar fallas o incendios.</li>
+                        <li><strong>Intercambiadores de Calor de Tubo y Carcasa:</strong> Son dispositivos donde un fluido fluye dentro de tubos mientras otro fluye por fuera (dentro de una carcasa). El calor se transfiere por conducción a través de las paredes de los tubos, y el análisis radial es el primer paso para su diseño.</li>
+                    </ul>
+                     <div class="flex justify-center my-6">
+                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Southern_Cross_Cable_cross_section.svg/640px-Southern_Cross_Cable_cross_section.svg.png" alt="Sección transversal de un cable submarino" class="rounded-lg shadow-lg bg-white" style="max-width: 500px;">
+                    </div>
+                    <p class="text-center text-sm -mt-4 text-gray-600">Sección transversal de un cable, mostrando múltiples capas cilíndricas.</p>
+                </div>
+            </div>
+
+            <!-- Pestaña Ejercicio -->
+            <div id="tab-exercise-cil" class="tab-content">
+                <div class="bg-white p-8 rounded-xl shadow-md max-w-3xl mx-auto">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Ejercicio Práctico Dinámico</h2>
+                    <div class="prose max-w-none">
+                        <p class="mb-4"><strong>Problema:</strong> Se utiliza una tubería de acero inoxidable (k = <strong id="ex-k-cil" class="text-blue-600"></strong> W/m·K) de <strong id="ex-L-cil" class="text-blue-600"></strong> m de longitud para transportar agua caliente. La tubería tiene un radio interior de <strong id="ex-r1-cil" class="text-blue-600"></strong> cm y un radio exterior de <strong id="ex-r2-cil" class="text-blue-600"></strong> cm. Las temperaturas de las superficies interior y exterior de la tubería se mantienen en <strong id="ex-T1-cil" class="text-blue-600"></strong> °C y <strong id="ex-T2-cil" class="text-blue-600"></strong> °C, respectivamente. Calcule la tasa de pérdida de calor de la tubería.</p>
+                        <div class="flex justify-center my-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/VelocityContours.png/640px-VelocityContours.png" alt="Contornos de velocidad alrededor de un cilindro" class="rounded-lg shadow-lg" style="max-width: 400px;">
+                        </div>
+                        <button id="show-answer-btn-cil" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Mostrar Solución</button>
+                        <div id="exercise-answer-cil" class="hidden mt-6 p-4 bg-gray-100 rounded-lg border">
+                            <h3 class="font-semibold">Solución Paso a Paso:</h3>
+                            <p><strong>1. Identificar los datos y convertir unidades:</strong></p>
+                            <ul>
+                                <li>Longitud, \(L = <span id="sol-L-cil"></span> \text{ m}\)</li>
+                                <li>Conductividad, \(k = <span id="sol-k-cil"></span> \text{ W/m·K}\)</li>
+                                <li>Radio interior, \(r_1 = <span id="sol-r1-cil"></span> \text{ cm} = <span id="sol-r1m-cil"></span> \text{ m}\)</li>
+                                <li>Radio exterior, \(r_2 = <span id="sol-r2-cil"></span> \text{ cm} = <span id="sol-r2m-cil"></span> \text{ m}\)</li>
+                                <li>Temp. interior, \(T_1 = <span id="sol-T1-cil"></span> \text{ °C}\)</li>
+                                <li>Temp. exterior, \(T_2 = <span id="sol-T2-cil"></span> \text{ °C}\)</li>
+                            </ul>
+                            <p><strong>2. Calcular la resistencia térmica por conducción:</strong></p>
+                            <p>\( R_{cil} = \frac{\ln(r_2/r_1)}{2 \pi L k} = \frac{\ln(<span id="sol-r2m-cil2"></span>/<span id="sol-r1m-cil2"></span>)}{2 \pi (<span id="sol-L-cil2"></span>) (<span id="sol-k-cil2"></span>)} = <span id="sol-R-cil"></span> \text{ °C/W} \)</p>
+                            <p><strong>3. Calcular la tasa de transferencia de calor:</strong></p>
+                            <p>\( \dot{Q} = \frac{T_1 - T_2}{R_{cil}} = \frac{<span id="sol-T1-cil2"></span> - <span id="sol-T2-cil2"></span>}{<span id="sol-R-cil2"></span>} \)</p>
+                            <p><strong>Respuesta:</strong> La tasa de pérdida de calor es de <strong class="text-xl" id="sol-Q-cil"></strong><strong> W</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pestaña Calculadora -->
+            <div id="tab-calc-cil" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md max-w-2xl mx-auto">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Calculadora de Cilindro Simple</h2>
+                    <p class="text-gray-600 mb-6">Calcula la transferencia de calor para un cilindro hueco con convección en ambos lados.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="calculator-form-cil">
+                        <div><label>Q (W)</label><input type="number" data-var="Q" class="p-2 border rounded-md w-full"></div>
+                        <div><label>Longitud (m)</label><input type="number" data-var="L" class="p-2 border rounded-md w-full"></div>
+                        <div><label>T_inf_1 (°C)</label><input type="number" data-var="Tinf1" class="p-2 border rounded-md w-full"></div>
+                        <div><label>h_1 (W/m²K)</label><input type="number" data-var="h1" class="p-2 border rounded-md w-full"></div>
+                        <div><label>r_1 (m)</label><input type="number" data-var="r1" class="p-2 border rounded-md w-full"></div>
+                        <div><label>k (W/mK)</label><input type="number" data-var="k" class="p-2 border rounded-md w-full"></div>
+                        <div><label>r_2 (m)</label><input type="number" data-var="r2" class="p-2 border rounded-md w-full"></div>
+                        <div><label>T_inf_2 (°C)</label><input type="number" data-var="Tinf2" class="p-2 border rounded-md w-full"></div>
+                        <div><label>h_2 (W/m²K)</label><input type="number" data-var="h2" class="p-2 border rounded-md w-full"></div>
+                    </div>
+                    <button id="calc-btn-cil" class="mt-6 w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Calcular</button>
+                    <div id="calc-results-cil" class="mt-6 bg-gray-100 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg">Resultado:</h3>
+                        <p id="calc-output-cil" class="text-xl font-mono"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pestaña Cuestionario -->
+            <div id="tab-quiz-cil" class="tab-content">
+                <div class="bg-white p-8 rounded-xl shadow-md max-w-3xl mx-auto">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Cuestionario de Autoevaluación</h2>
+                    <form id="quiz-form-cil">
+                        <div class="mb-6">
+                            <p class="font-semibold">1. En un cilindro hueco, el área de transferencia de calor por conducción...</p>
+                            <div class="mt-2 space-y-1"><label><input type="radio" name="q1c" value="a"> a) Es constante a lo largo del radio.</label><br><label><input type="radio" name="q1c" value="b"> b) Aumenta linealmente con el radio.</label><br><label><input type="radio" name="q1c" value="c"> c) Disminuye con el radio.</label></div>
+                        </div>
+                        <div class="mb-6">
+                            <p class="font-semibold">2. La distribución de temperatura a través de la pared de un cilindro hueco en estado estacionario es:</p>
+                            <div class="mt-2 space-y-1"><label><input type="radio" name="q2c" value="a"> a) Lineal.</label><br><label><input type="radio" name="q2c" value="b"> b) Exponencial.</label><br><label><input type="radio" name="q2c" value="c"> c) Logarítmica.</label></div>
+                        </div>
+                        <div class="mb-6">
+                            <p class="font-semibold">3. El radio crítico de aislamiento se define como:</p>
+                            <div class="mt-2 space-y-1"><label><input type="radio" name="q3c" value="a"> a) El radio para el cual la pérdida de calor es mínima.</label><br><label><input type="radio" name="q3c" value="b"> b) El radio exterior de la tubería.</label><br><label><input type="radio" name="q3c" value="c"> c) El radio de aislamiento para el cual la pérdida de calor es máxima.</label></div>
+                        </div>
+                        <div class="mb-6">
+                            <p class="font-semibold">4. Si el radio exterior de una tubería es menor que el radio crítico, añadir aislamiento...</p>
+                            <div class="mt-2 space-y-1"><label><input type="radio" name="q4c" value="a"> a) Aumentará la pérdida de calor.</label><br><label><input type="radio" name="q4c" value="b"> b) Disminuirá la pérdida de calor.</label><br><label><input type="radio" name="q4c" value="c"> c) No afectará la pérdida de calor.</label></div>
+                        </div>
+                        <div class="mb-6">
+                            <p class="font-semibold">5. La resistencia a la conducción en un cilindro depende de:</p>
+                            <div class="mt-2 space-y-1"><label><input type="radio" name="q5c" value="a"> a) La diferencia de los radios (\(r_2 - r_1\)).</label><br><label><input type="radio" name="q5c" value="b"> b) El logaritmo del cociente de los radios (\(\ln(r_2/r_1)\)).</label><br><label><input type="radio" name="q5c" value="c"> c) El promedio de los radios.</label></div>
+                        </div>
+                    </form>
+                    <button id="check-quiz-btn-cil" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Verificar Respuestas</button>
+                    <div id="quiz-results-cil" class="mt-6"></div>
+                </div>
+            </div>
+
+            <!-- Pestaña Bibliografía -->
+            <div id="tab-biblio-cil" class="tab-content">
+                <div class="bg-white p-8 rounded-xl shadow-md prose max-w-none">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Bibliografía y Recursos Adicionales</h2>
+                    <h3>Bibliografía Principal</h3>
+                    <ul>
+                        <li>Çengel, Y. A., & Ghajar, A. J. (2011). <em>Transferencia de calor y masa: fundamentos y aplicaciones</em> (4.ª ed.). McGraw-Hill.</li>
+                    </ul>
+                    <h3>Recursos en Línea</h3>
+                    <ul>
+                        <li><a href="https://www.engineersedge.com/heat_transfer/heat_transfer.htm" target="_blank" rel="noopener noreferrer">Engineers Edge: Heat Transfer</a> - Un buen recurso con fórmulas y calculadoras.</li>
+                        <li><a href="https://www.engineeringtoolbox.com/thermal-conductivity-d_429.html" target="_blank" rel="noopener noreferrer">The Engineering ToolBox: Thermal Conductivity</a> - Extensas tablas de propiedades de materiales.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lógica de Pestañas
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === e.currentTarget.dataset.tab) {
+                            content.classList.add('active');
+                        }
+                    });
+                    if (e.currentTarget.dataset.tab === 'tab-exercise-cil') {
+                        setupDynamicExerciseCylinder();
+                    }
+                    if (e.currentTarget.dataset.tab === 'tab-crit-radius-cil') {
+                        calculateCriticalRadius();
+                    }
+                });
+            });
+
+            // --- Lógica para Sim: Multicapas (Cilindros) ---
+            const layersContainerCil = document.getElementById('layers-container-cil');
+            const addLayerBtnCil = document.getElementById('add-layer-btn-cil');
+            const removeLayerBtnCil = document.getElementById('remove-layer-btn-cil');
+            const s2_Tinf1_cil = document.getElementById('s2-Tinf1-cil');
+            const s2_h1_cil = document.getElementById('s2-h1-cil');
+            const s2_Tinf2_cil = document.getElementById('s2-Tinf2-cil');
+            const s2_h2_cil = document.getElementById('s2-h2-cil');
+            const s2_L_cil = document.getElementById('s2-L-cil');
+            const s2_results_cil = document.getElementById('s2-results-cil');
+            const s2_svg_cil = document.getElementById('s2-svg-cil');
+            const materialsCil = {"Cobre": 401, "Acero Inox.": 15, "Vidrio": 0.78, "Lana de roca": 0.04, "Poliestireno": 0.03};
+            let layerCountCil = 0;
+
+            function addLayerCil() {
+                layerCountCil++;
+                const layerId = `layer-cil-${layerCountCil}`;
+                const prevRadiusId = layerCountCil === 1 ? 'r_pipe_outer' : `r_outer_${layerCountCil - 1}`;
+                const layerHTML = `
+                    <div id="${layerId}" class="p-3 border rounded-lg bg-gray-50">
+                        <h4 class="font-semibold text-gray-800">${layerCountCil === 1 ? 'Tubería' : `Aislamiento ${layerCountCil - 1}`}</h4>
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                            <div>
+                                <label class="text-sm">Material:</label>
+                                <select class="s2-material-cil w-full p-1 border rounded-md">
+                                    ${Object.keys(materialsCil).map(m => `<option value="${materialsCil[m]}" ${layerCountCil === 1 ? (m === 'Acero Inox.' ? 'selected' : '') : (m === 'Lana de roca' ? 'selected' : '')}>${m}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-sm">${layerCountCil === 1 ? 'Radio Exterior (m):' : 'Espesor (m):'}</label>
+                                <input type="number" class="s2-dim-cil w-full p-1 border rounded-md" value="${layerCountCil === 1 ? 0.025 : 0.05}" step="0.005" min="0.001">
+                            </div>
+                        </div>
+                    </div>`;
+                layersContainerCil.insertAdjacentHTML('beforeend', layerHTML);
+                updateMultilayerCylinder();
+            }
+
+            function removeLayerCil() {
+                if (layerCountCil > 1) {
+                    document.getElementById(`layer-cil-${layerCountCil}`).remove();
+                    layerCountCil--;
+                    updateMultilayerCylinder();
+                }
+            }
+
+            function updateMultilayerCylinder() {
+                const Tinf1 = parseFloat(s2_Tinf1_cil.value);
+                const h1 = parseFloat(s2_h1_cil.value);
+                const Tinf2 = parseFloat(s2_Tinf2_cil.value);
+                const h2 = parseFloat(s2_h2_cil.value);
+                const L = parseFloat(s2_L_cil.value);
+
+                const layers = [];
+                let currentRadius = 0;
+                document.querySelectorAll('#layers-container-cil > div').forEach((div, index) => {
+                    const k = parseFloat(div.querySelector('.s2-material-cil').value);
+                    const dim = parseFloat(div.querySelector('.s2-dim-cil').value);
+                    const r_inner = index === 0 ? dim / 2 : currentRadius; // Assume first entry is pipe OD, then insulation thickness
+                    const r_outer = index === 0 ? dim : currentRadius + dim;
+                    currentRadius = r_outer;
+                    layers.push({ k, r_inner, r_outer });
+                });
+
+                if (layers.length === 0 || !Tinf1 || !h1 || !Tinf2 || !h2 || !L) return;
+
+                const r_i = layers[0].r_inner;
+                const r_o = layers[layers.length - 1].r_outer;
+
+                const R_conv1 = 1 / (h1 * 2 * Math.PI * r_i * L);
+                const R_conv2 = 1 / (h2 * 2 * Math.PI * r_o * L);
+                
+                let R_cond_total = 0;
+                const R_layers = layers.map(layer => Math.log(layer.r_outer / layer.r_inner) / (2 * Math.PI * L * layer.k));
+                R_layers.forEach(r => R_cond_total += r);
+
+                const R_total = R_conv1 + R_cond_total + R_conv2;
+                const Q = (Tinf1 - Tinf2) / R_total;
+
+                let resultsHTML = `<p>Resistencia Total, \\(R_{total}\\): <strong>${R_total.toFixed(4)} °C/W</strong></p><p>Pérdida de Calor, \\(\\dot{Q}\\): <strong>${Q.toFixed(2)} W</strong></p>`;
+                
+                const temps = [Tinf1];
+                let currentT = Tinf1;
+                currentT -= Q * R_conv1;
+                temps.push(currentT);
+                resultsHTML += `<p>Temp. Superficie Interior, \\(T_{s,1}\\): <strong>${currentT.toFixed(2)} °C</strong></p>`;
+
+                for (let i = 0; i < R_layers.length; i++) {
+                    currentT -= Q * R_layers[i];
+                    temps.push(currentT);
+                    resultsHTML += `<p>Temp. Interfaz ${i+1}, \\(T_{s,${i+2}}\\): <strong>${currentT.toFixed(2)} °C</strong></p>`;
+                }
+                
+                s2_results_cil.innerHTML = resultsHTML;
+                drawMultilayerCylinder(layers);
+                if (window.MathJax) MathJax.typesetPromise();
+            }
+            
+            function drawMultilayerCylinder(layers) {
+                s2_svg_cil.innerHTML = '';
+                if (!layers || layers.length === 0) return;
+                const max_r = layers[layers.length - 1].r_outer;
+                const scale = 100 / max_r;
+                
+                layers.slice().reverse().forEach((layer, index) => {
+                    const r = layer.r_outer * scale;
+                    const color = `hsl(${200 + index * 40}, 70%, 60%)`;
+                    s2_svg_cil.innerHTML += `<circle cx="100" cy="100" r="${r}" fill="${color}" stroke="#333" />`;
+                });
+            }
+
+            const s2_inputs_cil = [s2_Tinf1_cil, s2_h1_cil, s2_Tinf2_cil, s2_h2_cil, s2_L_cil];
+            s2_inputs_cil.forEach(input => input.addEventListener('input', updateMultilayerCylinder));
+            addLayerBtnCil.addEventListener('click', addLayerCil);
+            removeLayerBtnCil.addEventListener('click', removeLayerCil);
+            layersContainerCil.addEventListener('input', updateMultilayerCylinder);
+
+            // --- Lógica Radio Crítico ---
+            const rc_k = document.getElementById('rc-k');
+            const rc_h = document.getElementById('rc-h');
+            const rc_calc_btn = document.getElementById('rc-calc-btn');
+            const rc_result = document.getElementById('rc-result');
+
+            function calculateCriticalRadius() {
+                const k = parseFloat(rc_k.value);
+                const h = parseFloat(rc_h.value);
+                if (k > 0 && h > 0) {
+                    const r_crit = k / h;
+                    rc_result.innerHTML = `\\(r_{cr} = \\frac{${k}}{${h}} = ${r_crit.toFixed(4)} \\text{ m} = ${(r_crit*100).toFixed(2)} \\text{ cm}\\)`;
+                } else {
+                    rc_result.textContent = "Valores inválidos";
+                }
+                if (window.MathJax) MathJax.typesetPromise();
+            }
+            rc_calc_btn.addEventListener('click', calculateCriticalRadius);
+            [rc_k, rc_h].forEach(el => el.addEventListener('input', calculateCriticalRadius));
+
+            // --- Lógica para Ejercicio Dinámico (Cilindro) ---
+            const showAnswerBtnCil = document.getElementById('show-answer-btn-cil');
+            const exerciseAnswerCil = document.getElementById('exercise-answer-cil');
+            
+            function setupDynamicExerciseCylinder() {
+                const k = (Math.random() * 5 + 15).toFixed(1);   // 15 - 20 W/mK
+                const L = (Math.random() * 10 + 5).toFixed(0);   // 5 - 15 m
+                const r1 = (Math.random() * 1.5 + 2).toFixed(1); // 2.0 - 3.5 cm
+                const r2 = (parseFloat(r1) + Math.random() * 0.5 + 0.3).toFixed(1); // r1 + 0.3-0.8 cm
+                const T1 = Math.floor(Math.random() * 30 + 90); // 90 - 119 °C
+                const T2 = (T1 - (Math.random() * 5 + 5)).toFixed(0);  // T1 - 5-10°C
+                
+                const r1m = r1 / 100;
+                const r2m = r2 / 100;
+
+                const R_cil = Math.log(r2m / r1m) / (2 * Math.PI * L * k);
+                const Q = ((T1 - T2) / R_cil).toFixed(0);
+
+                document.getElementById('ex-k-cil').textContent = k;
+                document.getElementById('ex-L-cil').textContent = L;
+                document.getElementById('ex-r1-cil').textContent = r1;
+                document.getElementById('ex-r2-cil').textContent = r2;
+                document.getElementById('ex-T1-cil').textContent = T1;
+                document.getElementById('ex-T2-cil').textContent = T2;
+
+                document.getElementById('sol-k-cil').textContent = k;
+                document.getElementById('sol-L-cil').textContent = L;
+                document.getElementById('sol-r1-cil').textContent = r1;
+                document.getElementById('sol-r1m-cil').textContent = r1m;
+                document.getElementById('sol-r2-cil').textContent = r2;
+                document.getElementById('sol-r2m-cil').textContent = r2m;
+                document.getElementById('sol-T1-cil').textContent = T1;
+                document.getElementById('sol-T2-cil').textContent = T2;
+                
+                document.getElementById('sol-k-cil2').textContent = k;
+                document.getElementById('sol-L-cil2').textContent = L;
+                document.getElementById('sol-r1m-cil2').textContent = r1m;
+                document.getElementById('sol-r2m-cil2').textContent = r2m;
+                document.getElementById('sol-T1-cil2').textContent = T1;
+                document.getElementById('sol-T2-cil2').textContent = T2;
+                document.getElementById('sol-R-cil').textContent = R_cil.toExponential(4);
+                document.getElementById('sol-R-cil2').textContent = R_cil.toExponential(4);
+                document.getElementById('sol-Q-cil').textContent = Q;
+
+                exerciseAnswerCil.classList.add('hidden');
+            }
+            if(showAnswerBtnCil) showAnswerBtnCil.addEventListener('click', () => exerciseAnswerCil.classList.toggle('hidden'));
+
+            // --- Lógica para Calculadora (Cilindro) ---
+            document.getElementById('calc-btn-cil').addEventListener('click', () => {
+                const inputs = {};
+                let blankVar = null;
+                let blankCount = 0;
+                document.querySelectorAll('#calculator-form-cil input').forEach(input => {
+                    const key = input.dataset.var;
+                    const value = input.value;
+                    if (value === '') { blankVar = key; blankCount++; } else { inputs[key] = parseFloat(value); }
+                });
+
+                if (blankCount !== 1) {
+                    document.getElementById('calc-output-cil').textContent = "Deje un solo campo en blanco.";
+                    return;
+                }
+
+                try {
+                    let result;
+                    const { Q, L, Tinf1, h1, r1, k, r2, Tinf2, h2 } = inputs;
+                    const Rconv1 = 1 / (h1 * 2 * Math.PI * r1 * L);
+                    const Rcond = Math.log(r2 / r1) / (2 * Math.PI * L * k);
+                    const Rconv2 = 1 / (h2 * 2 * Math.PI * r2 * L);
+                    const Rtotal = Rconv1 + Rcond + Rconv2;
+
+                    switch(blankVar) {
+                        case 'Q': result = (Tinf1 - Tinf2) / Rtotal; break;
+                        // Otros casos son más complejos de despejar, se omite por simplicidad en esta versión.
+                        default: result = "Cálculo para esta variable no implementado.";
+                    }
+                    document.getElementById('calc-output-cil').textContent = (typeof result === 'number') ? `${blankVar} = ${result.toFixed(2)} W` : result;
+                } catch (e) {
+                    document.getElementById('calc-output-cil').textContent = "Error en el cálculo.";
+                }
+            });
+
+            // --- Lógica para Cuestionario (Cilindro) ---
+            document.getElementById('check-quiz-btn-cil').addEventListener('click', () => {
+                const answers = { q1c: 'b', q2c: 'c', q3c: 'c', q4c: 'a', q5c: 'b' };
+                const form = document.getElementById('quiz-form-cil');
+                const resultsContainer = document.getElementById('quiz-results-cil');
+                let score = 0;
+                let resultHTML = '<h3 class="font-semibold text-lg">Resultados:</h3><ul class="list-disc pl-5 mt-2">';
+                for (const [question, correctAnswer] of Object.entries(answers)) {
+                    const selected = form.elements[question].value;
+                    const questionLabel = form.querySelector(`input[name=${question}]`).parentElement.parentElement.previousElementSibling.textContent;
+                    if (selected === correctAnswer) {
+                        score++;
+                        resultHTML += `<li class="text-green-600"><strong>${questionLabel}</strong> ¡Correcto!</li>`;
+                    } else {
+                        resultHTML += `<li class="text-red-600"><strong>${questionLabel}</strong> Incorrecto. La respuesta correcta era la opción '${correctAnswer}'.</li>`;
+                    }
+                }
+                resultHTML += `</ul><p class="mt-4 font-bold text-xl">Tu puntuación es: ${score} de 5</p>`;
+                resultsContainer.innerHTML = resultHTML;
+            });
+
+            // --- Inicializaciones ---
+            addLayerCil(); // Add the first layer (pipe)
+            updateMultilayerCylinder();
+            calculateCriticalRadius();
+            setupDynamicExerciseCylinder();
+        });
+    </script>
+</body>
+</html>
